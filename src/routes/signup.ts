@@ -35,9 +35,12 @@ router.post(
     }
 
     const { name, email, password } = req.body;
+    const sanitizedEmail = email.toLowerCase();
 
     // Check duplicate email
-    const userWithEmail = await User.findOne({ where: { email: email } });
+    const userWithEmail = await User.findOne({
+      where: { email: sanitizedEmail },
+    });
     if (userWithEmail !== null) {
       throw new AlreadyExistsError();
     }
@@ -49,7 +52,7 @@ router.post(
     const token = createToken(userId, email);
 
     // Create user
-    await User.create({
+    const user = await User.create({
       name: name,
       email: email.toLowerCase(),
       hash: await hashPassword(password),
@@ -59,11 +62,7 @@ router.post(
 
     res.send({
       status: "success",
-      data: {
-        name: name,
-        email: email,
-        token: token,
-      },
+      data: user.get(),
     });
   }
 );
