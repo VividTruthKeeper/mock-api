@@ -43,7 +43,7 @@ router.post(
     // Create user
     await User.create({
       name: name,
-      email: email,
+      email: email.toLowerCase(),
       hash: await hashPassword(password),
     });
 

@@ -18,8 +18,10 @@ router.post(
 
     const { email, password } = req.body;
     let passwordCorrect: boolean = false;
-
-    const userByEmail = await User.findOne({ where: { email: email } });
+    const sanitizedEmail = email.toLowerCase();
+    const userByEmail = await User.findOne({
+      where: { email: sanitizedEmail },
+    });
     if (userByEmail) {
       const result = await userByEmail.get();
       passwordCorrect = await comparePassword(password, result.hash);
