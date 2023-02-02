@@ -11,6 +11,7 @@ router.post("/api/users/signin", async (req, res) => {
   try {
     const userByEmail = await User.findOne({ where: { email: email } });
     if (userByEmail) {
+      console.log(userByEmail);
       const result = await userByEmail.get();
       passwordCorrect = await comparePassword(password, result.hash);
     }
@@ -18,8 +19,6 @@ router.post("/api/users/signin", async (req, res) => {
     console.log(err);
     throw new DatabaseConnectionError();
   }
-
-  console.log(passwordCorrect);
 
   if (passwordCorrect) {
     res.send({
