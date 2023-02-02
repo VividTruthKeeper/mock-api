@@ -1,14 +1,15 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
+import { v4 as uuidv4 } from "uuid";
 
 // Errors
 import { RequestValidationError } from "../errors/request-validation-error";
-import { DatabaseConnectionError } from "../errors/database-connection-error";
 
 // Models
 import { User } from "../models/user";
 import { hashPassword } from "../functions/hashPassword";
 import { AlreadyExistsError } from "../errors/user/already-exists-error";
+import { createToken } from "../functions/createToken";
 
 const router = express.Router();
 
@@ -40,11 +41,20 @@ router.post(
     if (userWithEmail !== null) {
       throw new AlreadyExistsError();
     }
+
+    // Create id
+    const userId = uuidv4();
+
+    // Create token
+    const token = createToken(userId, email);
+
     // Create user
     await User.create({
       name: name,
       email: email.toLowerCase(),
       hash: await hashPassword(password),
+      userId: userId,
+      token: token,
     });
 
     res.send({
@@ -52,6 +62,7 @@ router.post(
       data: {
         name: name,
         email: email,
+        token: token,
       },
     });
   }
