@@ -56,8 +56,10 @@ const start = async (): Promise<void> => {
 
   app.use(errorHandler);
 
-  app.listen(3000, () => {
-    console.log("Listening on 3000");
+  const port = process.env.API_PORT || 8080;
+
+  app.listen(port, () => {
+    console.log(`Listening on ${port}`);
   });
 };
 
