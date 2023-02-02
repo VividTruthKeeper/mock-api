@@ -8,7 +8,7 @@ import { createToken } from "../functions/createToken";
 const router = express.Router();
 
 router.post(
-  "/api/users/signin",
+  "/api/users/signIn",
   [body("email").isEmail().withMessage("Invalid email")],
   async (req: Request, res: Response) => {
     // req params error

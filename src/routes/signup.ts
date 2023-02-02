@@ -14,7 +14,7 @@ import { createToken } from "../functions/createToken";
 const router = express.Router();
 
 router.post(
-  "/api/users/signup",
+  "/api/users/signUp",
   [
     body("name")
       .isLength({ min: 3, max: 20 })
