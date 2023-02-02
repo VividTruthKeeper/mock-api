@@ -3,6 +3,7 @@ import { body, validationResult } from "express-validator";
 import { comparePassword } from "../functions/comparePassword";
 import { User } from "../models/user";
 import { RequestValidationError } from "../errors/request-validation-error";
+import { createToken } from "../functions/createToken";
 
 const router = express.Router();
 
@@ -18,22 +19,26 @@ router.post(
 
     const { email, password } = req.body;
     let passwordCorrect: boolean = false;
+    let result;
     const sanitizedEmail = email.toLowerCase();
     const userByEmail = await User.findOne({
       where: { email: sanitizedEmail },
     });
     if (userByEmail) {
-      const result = await userByEmail.get();
+      result = await userByEmail.get();
       passwordCorrect = await comparePassword(password, result.hash);
     }
 
     if (passwordCorrect) {
-      res.send({
+      console.log(userByEmail?.token);
+      userByEmail?.update({ token: createToken(result.userId, result.email) });
+
+      res.status(200).send({
         status: "success",
-        message: "Signed in successfuly",
+        data: result,
       });
     } else {
-      res.send({
+      res.status(401).send({
         status: "failed",
         message: "Incorrect password",
       });
