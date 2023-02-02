@@ -1,10 +1,12 @@
 import dotenv from "dotenv";
-dotenv.config();
+
 import cors from "cors";
 import express from "express";
 import "reflect-metadata";
 import "express-async-errors";
 import { json } from "body-parser";
+
+dotenv.config();
 
 // Routes
 import { currentUserRouter } from "./routes/current-user";
@@ -60,3 +62,5 @@ const start = async (): Promise<void> => {
 };
 
 void start();
+
+export default app;
