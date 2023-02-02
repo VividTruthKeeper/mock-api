@@ -21,6 +21,7 @@ import { DatabaseConnectionError } from "./errors/database-connection-error";
 
 // DB
 import { sequelize } from "./instances/sequelize";
+import { initDatabase } from "./functions/initDatabase";
 
 const app = express();
 
@@ -32,6 +33,13 @@ const start = async (): Promise<void> => {
   app.use(signinRouter);
   app.use(signoutRouter);
   app.use(signupRouter);
+
+  try {
+    await sequelize.authenticate();
+  } catch (err) {
+    console.log(err);
+    initDatabase(process.env.DB_NAME || "");
+  }
 
   try {
     await sequelize.sync();

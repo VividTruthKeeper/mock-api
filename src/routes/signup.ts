@@ -44,6 +44,10 @@ router.post(
 
     res.send({
       status: "success",
+      data: {
+        name: name,
+        email: email,
+      },
     });
   }
 );

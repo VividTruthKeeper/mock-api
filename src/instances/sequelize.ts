@@ -3,8 +3,9 @@ import process from "process";
 
 // Models
 import { User } from "../models/user";
+import { initDatabase } from "../functions/initDatabase";
 
-const db: string = "mockapi";
+const db: string = process.env.DB_NAME || "";
 
 const username = process.env.DB_USERNAME || "";
 const password = process.env.DB_PASSWORD || "";
