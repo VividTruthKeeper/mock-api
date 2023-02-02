@@ -21,8 +21,11 @@ router.post(
     body("email").isEmail().withMessage("Invalid email"),
     body("password")
       .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage("Password must be between 4 and 20 characters"),
+      .isLength({ min: 8, max: 64 })
+      .matches(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$`)
+      .withMessage(
+        "Password must be between 8 and 64 characters, must contain 1 number, 1 uppercase and 1 lowercase letters, and 1 special character"
+      ),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
