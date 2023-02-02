@@ -58,6 +58,8 @@ router.post(
       hash: await hashPassword(password),
       userId: userId,
       token: token,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     });
 
     res.send({
