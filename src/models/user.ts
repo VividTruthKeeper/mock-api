@@ -36,4 +36,16 @@ export class User extends Model {
     allowNull: false,
   })
   token!: string;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  createdAt!: Date;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  updatedAt!: Date;
 }
