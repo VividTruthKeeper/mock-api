@@ -8,6 +8,7 @@ import { DatabaseConnectionError } from "../errors/database-connection-error";
 // Models
 import { User } from "../models/user";
 import { hashPassword } from "../functions/hashPassword";
+import { AlreadyExistsError } from "../errors/user/already-exists-error";
 
 const router = express.Router();
 
@@ -31,16 +32,17 @@ router.post(
 
     const { name, email, password } = req.body;
 
-    try {
-      await User.create({
-        name: name,
-        email: email,
-        hash: await hashPassword(password),
-      });
-    } catch (err) {
-      console.log(err);
-      throw new DatabaseConnectionError();
+    // Check duplicate email
+    const userWithEmail = await User.findOne({ where: { email: email } });
+    if (userWithEmail !== null) {
+      throw new AlreadyExistsError();
     }
+    // Create user
+    await User.create({
+      name: name,
+      email: email,
+      hash: await hashPassword(password),
+    });
 
     res.send({
       status: "success",
