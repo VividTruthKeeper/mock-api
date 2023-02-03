@@ -4,6 +4,7 @@ import { comparePassword } from "../functions/comparePassword";
 import { User } from "../models/user";
 import { RequestValidationError } from "../errors/request-validation-error";
 import { createToken } from "../functions/createToken";
+import { IncorrectPasswordError } from "..//errors/user/incorrect-password-error";
 
 const router = express.Router();
 
@@ -30,7 +31,6 @@ router.post(
     }
 
     if (passwordCorrect) {
-      console.log(userByEmail?.token);
       userByEmail?.update({ token: createToken(result.userId, result.email) });
 
       res.status(200).send({
@@ -38,10 +38,7 @@ router.post(
         user: result,
       });
     } else {
-      res.status(401).send({
-        status: "failed",
-        message: "Incorrect password",
-      });
+      throw new IncorrectPasswordError();
     }
   }
 );
