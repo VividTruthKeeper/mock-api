@@ -12,6 +12,8 @@ import { currentUserRouter } from "./routes/current-user";
 import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";
 import { signupRouter } from "./routes/signup";
+import { updateUserRouter } from "./routes/update-user";
+import { changePasswordRouter } from "./routes/change-password";
 
 // Middlewares
 import { errorHandler } from "./middlewares/error-handler";
@@ -34,6 +36,8 @@ const start = async (): Promise<void> => {
   app.use(signinRouter);
   app.use(signoutRouter);
   app.use(signupRouter);
+  app.use(updateUserRouter);
+  app.use(changePasswordRouter);
 
   try {
     await sequelize.authenticate();
