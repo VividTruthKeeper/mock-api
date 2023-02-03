@@ -13,10 +13,10 @@ router.get("/api/users/currentUser", async (req, res) => {
     throw new TokenInvalidError();
   }
 
-  const { userId } = await authVerify(token);
+  const decodedToken = await authVerify(token);
+  const { userId } = decodedToken;
 
   const userByUserId = await User.findOne({ where: { userId: userId } });
-
   if (userByUserId) {
     res.status(200).send({
       status: "success",
