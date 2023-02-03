@@ -35,7 +35,7 @@ router.post(
 
       res.status(200).send({
         status: "success",
-        data: result,
+        user: result,
       });
     } else {
       res.status(401).send({

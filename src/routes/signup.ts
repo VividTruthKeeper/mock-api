@@ -64,7 +64,7 @@ router.post(
 
     res.send({
       status: "success",
-      data: user.get(),
+      user: user.get(),
     });
   }
 );

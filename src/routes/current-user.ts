@@ -20,7 +20,7 @@ router.get("/api/users/currentUser", async (req, res) => {
   if (userByUserId) {
     res.status(200).send({
       status: "success",
-      data: userByUserId.get(),
+      user: userByUserId.get(),
     });
   } else {
     throw new UserNotFound();
