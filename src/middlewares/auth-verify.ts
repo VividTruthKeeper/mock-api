@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { TokenInvalidError } from "../errors/user/token-invalid-error";
 
 interface IdecodedTokenType {
@@ -6,10 +6,18 @@ interface IdecodedTokenType {
   email: string;
   iat: number;
   exp: number;
+  expiresAt: Date;
 }
 
-export const authVerify = async (token: any): Promise<IdecodedTokenType> => {
-  const decodedToken = await jwt.verify(token, process.env.TOKEN_KEY || "");
+export const authVerify = async (token: any): Promise<any> => {
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(token, process.env.TOKEN_KEY || "");
+  } catch (err) {
+    if (err instanceof TokenExpiredError) {
+      throw new TokenInvalidError();
+    }
+  }
   if (!(decodedToken instanceof Object)) {
     throw new TokenInvalidError();
   }
