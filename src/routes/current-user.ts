@@ -1,7 +1,7 @@
 import express from "express";
 import { TokenInvalidError } from "../errors/user/token-invalid-error";
 import { UserNotFound } from "../errors/user/user-not-found";
-import { authVerify } from "../middlewares/auth-verify";
+import { authVerify } from "../functions/auth-verify";
 import { User } from "../models/user";
 
 const router = express.Router();
