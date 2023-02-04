@@ -18,9 +18,10 @@ router.get("/api/users/currentUser", async (req, res) => {
 
   const userByUserId = await User.findOne({ where: { userId: userId } });
   if (userByUserId) {
+    const { hash: _, ...userData } = userByUserId.get();
     res.status(200).send({
       status: "success",
-      user: userByUserId.get(),
+      user: userData,
     });
   } else {
     throw new UserNotFound();
