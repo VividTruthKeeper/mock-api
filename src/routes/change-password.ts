@@ -3,7 +3,7 @@ import { body, validationResult } from "express-validator";
 import { User } from "../models/user";
 import { RequestValidationError } from "../errors/request-validation-error";
 import { authVerify } from "../functions/auth-verify";
-import { TokenInvalidError } from "../errors/user/token-invalid-error";
+import { TokenRequiredError } from "../errors/user/token-required-error";
 import { UserNotFound } from "../errors/user/user-not-found";
 import { hashPassword } from "../functions/hashPassword";
 import { createToken } from "../functions/createToken";
@@ -30,7 +30,7 @@ router.put(
     const { token } = req.query;
 
     if (!token) {
-      throw new TokenInvalidError();
+      throw new TokenRequiredError();
     }
 
     const decodedToken = await authVerify(token);

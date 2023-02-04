@@ -1,5 +1,5 @@
 import express from "express";
-import { TokenInvalidError } from "../errors/user/token-invalid-error";
+import { TokenRequiredError } from "../errors/user/token-required-error";
 import { UserNotFound } from "../errors/user/user-not-found";
 import { authVerify } from "../functions/auth-verify";
 import { User } from "../models/user";
@@ -10,7 +10,7 @@ router.get("/api/users/currentUser", async (req, res) => {
   const { token } = req.query;
 
   if (!token) {
-    throw new TokenInvalidError();
+    throw new TokenRequiredError();
   }
 
   const decodedToken = await authVerify(token);
