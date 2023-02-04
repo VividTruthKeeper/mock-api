@@ -32,10 +32,10 @@ router.post(
 
     if (passwordCorrect) {
       userByEmail?.update({ token: createToken(result.userId, result.email) });
-
+      const { hash: _, ...userData } = result;
       res.status(200).send({
         status: "success",
-        user: result,
+        user: userData,
       });
     } else {
       throw new IncorrectPasswordError();

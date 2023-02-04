@@ -45,9 +45,11 @@ router.put(
         updatedAt: Date.now(),
       });
 
+      const { hash: _, ...userData } = updatedUser.get();
+
       res.status(200).send({
         status: "success",
-        user: await updatedUser.get(),
+        user: await userData,
       });
     } else {
       throw new UserNotFound();

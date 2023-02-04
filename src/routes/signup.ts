@@ -62,9 +62,12 @@ router.post(
       updatedAt: Date.now(),
     });
 
+    // remove hash
+    const { hash: _, ...userData } = user.get();
+
     res.send({
       status: "success",
-      user: user.get(),
+      user: userData,
     });
   }
 );
