@@ -7,6 +7,8 @@ import { TokenRequiredError } from "../errors/user/token-required-error";
 import { UserNotFound } from "../errors/user/user-not-found";
 import { hashPassword } from "../functions/hashPassword";
 import { createToken } from "../functions/createToken";
+import { comparePassword } from "../functions/comparePassword";
+import { OldPasswordError } from "../errors/user/old-password-error";
 
 const router = express.Router();
 
@@ -37,8 +39,12 @@ router.put(
     const { userId, email } = decodedToken;
 
     const userByUserId = await User.findOne({ where: { userId: userId } });
+    const { password } = req.body;
+    if (await comparePassword(password, userByUserId?.get().hash)) {
+      throw new OldPasswordError();
+    }
+
     if (userByUserId) {
-      const { password } = req.body;
       const updatedUser = await userByUserId?.update({
         hash: await hashPassword(password),
         token: createToken(userId, email),

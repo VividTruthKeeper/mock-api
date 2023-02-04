@@ -5,6 +5,7 @@ import { RequestValidationError } from "../errors/request-validation-error";
 import { authVerify } from "../functions/auth-verify";
 import { TokenRequiredError } from "../errors/user/token-required-error";
 import { UserNotFound } from "../errors/user/user-not-found";
+import { OldNameError } from "../errors/user/old-name-error";
 
 const router = express.Router();
 
@@ -29,10 +30,13 @@ router.put(
 
     const decodedToken = await authVerify(token);
     const { userId } = decodedToken;
+    const { name } = req.body;
 
     const userByUserId = await User.findOne({ where: { userId: userId } });
+    if (name === userByUserId?.get()) {
+      throw new OldNameError();
+    }
     if (userByUserId) {
-      const { name } = req.body;
       const updatedUser = await userByUserId?.update({
         name: name,
         updatedAt: Date.now(),
