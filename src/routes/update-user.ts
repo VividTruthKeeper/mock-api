@@ -33,7 +33,7 @@ router.put(
     const { name } = req.body;
 
     const userByUserId = await User.findOne({ where: { userId: userId } });
-    if (name === userByUserId?.get()) {
+    if (name === userByUserId?.get().name) {
       throw new OldNameError();
     }
     if (userByUserId) {
