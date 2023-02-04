@@ -42,6 +42,7 @@ router.put(
       const updatedUser = await userByUserId?.update({
         hash: await hashPassword(password),
         token: createToken(userId, email),
+        updatedAt: Date.now(),
       });
 
       res.status(200).send({

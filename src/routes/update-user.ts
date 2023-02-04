@@ -33,7 +33,10 @@ router.put(
     const userByUserId = await User.findOne({ where: { userId: userId } });
     if (userByUserId) {
       const { name } = req.body;
-      const updatedUser = await userByUserId?.update({ name: name });
+      const updatedUser = await userByUserId?.update({
+        name: name,
+        updatedAt: Date.now(),
+      });
 
       res.status(200).send({
         status: "success",
