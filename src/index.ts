@@ -9,6 +9,7 @@ dotenv.config();
 
 // Routes
 import { currentUserRouter } from "./routes/current-user";
+import { deleteUserRouter } from "./routes/delete-user";
 import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";
 import { signupRouter } from "./routes/signup";
@@ -38,6 +39,7 @@ const start = async (): Promise<void> => {
   app.use(signupRouter);
   app.use(updateUserRouter);
   app.use(changePasswordRouter);
+  app.use(deleteUserRouter);
 
   try {
     await sequelize.authenticate();
